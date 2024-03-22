@@ -94,4 +94,3 @@ function validateRequired(input){
         return false;
     }
 }
-
