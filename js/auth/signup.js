@@ -6,12 +6,15 @@ const inputMail = document.getElementById("EmailInput");
 const inputPassword = document.getElementById("PasswordInput");
 const inputValidationPassword = document.getElementById("ValidatePasswordInput");
 const btnValidation = document.getElementById("btn-validation-inscription");
+const formInscription = document.getElementById("formulaireInscription");
 
 inputNom.addEventListener("keyup", validateForm);
 inputPrenom.addEventListener("keyup", validateForm);
 inputMail.addEventListener("keyup", validateForm);
 inputPassword.addEventListener("keyup", validateForm);
 inputValidationPassword.addEventListener("keyup", validateForm);
+
+btnValidation.addEventListener("click", InscrireUtilisateur);
 
 //fonctions permettant de valider le formulaire
 function validateForm(){
@@ -93,4 +96,47 @@ function validateRequired(input){
         input.classList.add("is-invalid");
         return false;
     }
+}
+
+function InscrireUtilisateur(){
+    let dataForm = new FormData(formInscription);
+
+    let myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    
+    let raw = JSON.stringify({
+      "firstName": dataForm.get("nom"),
+      "lastName": dataForm.get("prenom"),
+      "email": dataForm.get("email"),
+      "password": dataForm.get("mdp"),
+    });
+    
+    let requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+    
+    /*
+    fetch("https://localhost:8000/api/registration", requestOptions)
+    .then(response => response.text()) --le transforme en--> .then(response => response.json())
+    .then(result => console.log(result))
+    .catch(error => console.error(error));
+    */
+
+    fetch (apiUrl+"registration", requestOptions)
+    .then(response => {
+        if(response.ok){
+            return response.json();
+        }
+        else{
+            alert("Erreur lors de l'inscription");
+        }
+    })
+    .then(result => {
+        alert("Bravo "+dataForm.get("prenom")+", vous êtes maintenant inscrit, vous pouvez vous connecter !");
+        document.location.href="/signin";
+    })
+    .catch(error => console.log('error', error));   
 }
