@@ -5,6 +5,7 @@ const signoutBtn = document.getElementById("signout-btn");
 const apiUrl = "https://127.0.0.1:8000/api/";
 
 signoutBtn.addEventListener("click", signout);
+//getInfosUser();
 
 function getRole(){
     return getCookie(RoleCookieName);
@@ -113,4 +114,33 @@ function sanitizeHtml(text){
     const tempHtml = document.createElement('div');
     tempHtml.textContent = text;
     return tempHtml.innerHTML;
+}
+
+function getInfosUser(){
+    //console.log("Récupération des informations utilisateur...");
+
+    let myHeaders = new Headers();
+    myHeaders.append("X-AUTH-TOKEN",getToken());
+
+    let requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow"
+    };
+
+    fetch(apiUrl+"account/me", requestOptions)
+    .then(response =>{
+        if(response.ok){
+            return response.json();
+        }
+        else{
+            console.log("Impossible de récupérerer les informations utilisateur");
+        }
+    })
+    .then(result => {
+        return result;
+    })
+    .catch(error => {
+        console.error("Erreur lors de la récupération des données utilisateur", error);
+    });
 }

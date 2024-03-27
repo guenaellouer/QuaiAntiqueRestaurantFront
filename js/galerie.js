@@ -9,7 +9,7 @@ let monImage = getImage(titre, imgSource);
 //ajouter ces informations dans innerHTML
 galerieImage.innerHTML = monImage;
 
-/*
+/* On déplace ce code dans script.js
 function sanitizeHtml(text){
     const tempHtml = document.createElement('div');
     tempHtml.textcontent = text;
